@@ -1,0 +1,244 @@
+:root {
+	--main-color: #555;
+	--secondary-color: #8de6c1;
+    --tertiary-color: #eee;
+
+	--black-color: #000;
+	--white-color: #fff;
+
+	--text-color: #000;
+	--bg-color: #fff;
+	--links-color: #318964;
+	--headers-color: #318964;
+    --headers-bg-color: #c1eedb;
+    --headers-color-2: var(--main-color);
+    --headers-bg-color-2: var(--tertiary-color);
+
+    --width-base: 1rem;
+    --width-base-negative: calc(var(--width-base) * -1);
+    --width-base-0-125: calc(var(--width-base) * 0.125);
+    --width-base-0-25: calc(var(--width-base) * 0.25);
+    --width-base-0-5: calc(var(--width-base) * 0.5);
+    --width-base-1-5: calc(var(--width-base) * 1.5);
+    --width-base-2: calc(var(--width-base) * 2);
+
+    --width-base-logo: calc(var(--width-base) * 15);
+    --width-base-logo-small: calc(var(--width-base) * 7.5);
+    --width-base-logo-tiny: calc(var(--width-base) * 5);
+    --width-base-logo-tiny-text: calc(var(--width-base) * 2);
+
+    --borders-default-width: 2px;
+}
+*, :after, :before {
+    outline: 0;
+    border: 0;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+
+	scrollbar-color: var(--main-color) var(--secondary-color);
+	scrollbar-width: thin;
+
+    scroll-behavior: smooth;
+    transition: all 0.125s;
+
+    font-family: "A", -apple-system, BlinkMacSystemFont,
+    "Segoe UI", system-ui, Roboto, Oxygen-Sans, Ubuntu, Cantarell,
+    "Helvetica Neue", sans-serif;
+
+    font-size: inherit;
+    word-spacing: 0.25rem;
+    line-height: 1.25;
+    color-scheme: light;
+    accent-color: var(--secondary-color);
+}
+:active, :focus {
+    outline: 0;
+    -webkit-tap-highlight-color: transparent;
+}
+::selection {
+    opacity: 1;
+    background: var(--black-color);
+    color: var(--white-color);
+}
+::placeholder {
+    color: var(--black-color);
+    opacity: 0.5;
+}
+html, .all_width_height {
+	width: 100%;
+	height: 100%;
+}
+body {
+	overflow-x: hidden;
+	background-color: var(--bg-color);
+	color: var(--text-color);
+    padding: var(--width-base);
+}
+a {
+	color: var(--links-color);
+	text-decoration: none;
+}
+a:hover, a:focus, a:active {
+	background-color: var(--secondary-color);
+	outline: 0.125rem solid var(--secondary-color);
+	text-decoration: underline;
+    border-radius: var(--width-base-0-25);
+}
+ul { list-style: none; }
+@media screen and (max-width: 640px){
+
+}
+@media screen and (min-width: 640px){
+    nav h2 { display: none !important; }
+    nav ul {
+        display: flex;
+        flex-flow: row !important;
+        gap: 0 !important;
+    }
+    nav li {
+        list-style: none;
+        padding: var(--width-base-0-125) var(--width-base) !important;
+        border-right: var(--borders-default-width) solid var(--black-color);
+    }
+    nav li:not(.back) {
+        text-indent: 0 !important;
+    }
+    nav li:not(.back):before {
+        display: none !important;
+    }
+    nav li:last-child {
+        border: none;
+    }
+}
+.margin-y {
+    margin-top: var(--width-base);
+    margin-bottom: var(--width-base);
+}
+.padding {
+    padding: var(--width-base);
+}
+.lines {
+    padding-left: var(--width-base-2);
+}
+.lines li {
+    text-indent: var(--width-base-negative);
+}
+.lines li:before {
+    content: '';
+    position: relative;
+    display: inline-block;
+    width: var(--width-base);
+}
+.lines li:not(.back):before {
+    height: var(--borders-default-width);
+    margin-bottom: var(--width-base-0-25);
+    margin-top: var(--width-base-0-25);
+    background: var(--black-color);
+    left: var(--width-base-negative);
+    overflow: hidden;
+}
+.lines li.back:before {
+    content: '<';
+}
+.center-x, .center-y {
+    display: flex;
+    justify-content: center;
+}
+.center-y {
+    flex-flow: column;
+    gap: var(--width-base-0-5);
+    color: var(--main-color);
+}
+.center-y > *, .center-x > * {
+    align-self: center;
+}
+.silver, .silver h2 {
+    border: var(--borders-default-width) solid var(--headers-bg-color-2);
+}
+.silver h2 {
+    background-color: var(--headers-bg-color-2);
+    color: var(--main-color)
+}
+
+h2:not(.title) {
+    background-color: var(--headers-bg-color);
+    font-size: var(--width-base-1-5);
+    font-weight: bold;
+    color: var(--headers-color);
+    padding: var(--width-base-0-5) var(--width-base);
+}
+
+/*header {
+    border-bottom: var(--borders-default-width) solid var(--main-color);
+}
+
+footer {
+    border-top: var(--borders-default-width) solid var(--main-color);
+}*/
+
+section, h2:not(.title) {
+    border-radius: var(--width-base-0-5);
+    border: var(--borders-default-width) solid var(--headers-bg-color);
+}
+
+h2.title {
+    font-size: var(--width-base-2);
+    padding: var(--width-base-0-5) var(--width-base);
+}
+
+h2.title::before {
+    content: 'Estructura >';
+    margin-right: var(--width-base);
+    color: var(--main-color);
+    font-size: var(--width-base-1-5);
+    font-weight: normal;
+}
+h3 {
+    color: var(--headers-color);
+}
+code {
+    border-radius: var(--width-base-0-5);
+    background: var(--tertiary-color);
+    padding: var(--width-base-0-125) var(--width-base-0-25);
+    font-family: Courier;
+    display: inline-block;
+}
+
+#logo {
+    width: var(--width-base-logo);
+}
+
+.extension #logo { width: var(--width-base-logo-small); }
+.extension span {
+    width: 100%;
+    font-size: var(--width-base-logo-tiny-text);
+    font-weight: normal;
+    margin-top: var(--width-base-0-5);
+    border-top: var(--borders-default-width) solid var(--tertiary-color);
+    padding: var(--width-base-0-5) var(--width-base) 0 var(--width-base);
+}
+@media screen and (min-width: 640px){
+    .extension {
+        flex-flow: row !important;
+        gap: var(--width-base) !important;
+    }
+    .extension span {
+        border-top: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+}
+
+section > div,
+section pre,
+section pre code {
+    overflow: hidden;
+    overflow-wrap: break-word;
+}
+
+section pre,
+section pre code {
+    width: 100%;
+    overflow-x: auto;
+}

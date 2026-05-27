@@ -1,0 +1,180 @@
+﻿<!DOCTYPE html>
+
+<html>
+
+<head>
+	<title>Events</title>
+
+	<link rel="icon" href="../../estructura.icon.png">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="Events: extensión del framework Estructura.">
+	<meta name="author" content="OKZGN">
+	<meta name="theme-color" content="#ffffff">
+
+	<link href="../../estructura.styles.css" rel="stylesheet" />
+	<script src="https://unpkg.com/estructura-js"></script>
+	<script src="estructura.events.js"></script>
+	<script>
+		_events(document).ready(function(){
+			console.log('Estructura Events ready.');
+
+			_events(document.body).on('click', function(event){
+				console.log('Click:', event.target ? event.target.nodeName : event);
+			}, { capture: true });
+
+			_events(document.body).on('click.customEvent', function(event){
+				console.log('Custom event.');
+			});
+
+			_events(document.body).on('.customEvent');
+		});
+	</script>
+</head>
+
+<body>
+	<header class="center-y padding">
+		<h1 class="extension center-y">
+			<img id="logo" src="../../estructura.logo.png" alt="Estructura, JavaScript Framework">
+		</h1>
+	</header>
+
+	<nav class="margin-y">
+		<section class="silver">
+			<h2 id="index" class="center-x">Menú</h2>
+			<div class="padding">
+				<ul class="lines center-y">
+					<li class="back"><a href="../../index.html#extensions">Atrás</a></li>
+					<li><a href="#description">Descripción</a></li>
+					<li><a href="#docs">Documentación</a></li>
+				</ul>
+			</div>
+		</section>
+	</nav>
+	
+	<main>
+		<h2 class="title">Events</h2>
+		<section class="margin-y">
+			<h2 id="description">Descripción</h2>
+			<div class="padding">Gestiona eventos del DOM. Con arquitectura de namespaces, gestión de memoria eficiente, soporte para múltiples modalidades de eventos y opciones para activar/pausar o vincular/ejecutar/eliminar eventos.<br><br><b>Librería:</b> <a target="_blank" href="estructura.events.js">estructura.events.js</a></div>
+		</section>
+
+		<section class="margin-y">
+			<h2 id="docs">Documentación</h2>
+			<div class="padding">
+				<h3>1. Inicialización y Control Global</h3>
+				<ul>
+					<li><code>_events</code>: Expone globalmente el manejador de la librería y sus funciones.</li>
+					<li><code>_events.pause()</code>: Detiene globalmente la ejecución de todos los eventos registrados.</li>
+					<li><code>_events.resume()</code>: Reactiva globalmente la ejecución de todos los eventos registrados.</li>
+					<li><code>_events(target)</code>: Selecciona el objetivo (<code>target</code>) de tipo <code>Object</code>, normalmente <code>Node</code> del DOM, que incluya las funciones <code>addEventListener</code> y <code>removeEventListener</code>, para aplicar los métodos disponibles.</li>
+				</ul>
+				<br>
+				<h3>2. Registro de Eventos: .on(event?, fn?, config?)</h3>
+				<p>Vincula manejadores de eventos al objeto <code>target</code>.</p>
+				<br>
+				<p><b>Sintaxis:</b></p>
+				<pre><code>_events(document.querySelector('body')).on('event.namespace', function(){}, {})</code></pre>
+				<br>
+				<p><b>Argumentos:</b></p>
+				<p><b>event (<code>String</code>):</b></p>
+				<p>Nombre del evento al que se vinculará el manejador. Opcionalmente puede incluir uno o varios namespaces para identificar el registro.</p>
+				<br>
+				<p><b>fn (<code>Function</code>):</b></p>
+				<p>Manejador enlazado al evento, recibe como primer argumento la información del evento. Si se omite, actúa como trigger (activador del evento).</p>
+				<br>
+				<p><b>config (<code>Object</code>):</b></p>
+				<p><b>Configuración General:</b></p>
+				<ul>
+					<li><code>overwrite</code>: Si es <code>true</code>, reemplaza todos los eventos previos en ese mismo namespace/evento.</li>
+					<li><code>resume</code>: Si es <code>true</code>, reactiva todos los eventos registrados respectivos.</li>
+					<li><code>execute</code>: Si es <code>false</code>, impide que se autoejecuten (por defecto) todos los eventos reactivados con <code>resume</code>.</li>
+				</ul>
+				<br>
+				<p><b>Configuración Específica:</b></p>
+				<ul>
+					<li><code>once</code>: Si es <code>true</code>, el evento se ejecuta una sola vez y se autoelimina.</li>
+					<li><code>capture</code>: Si es <code>true</code>, se usa la fase de captura del DOM.</li>
+					<li><code>passive</code>: Si es <code>true</code>, el evento es pasivo (optimización de scroll/touch).</li>
+				</ul>
+				<br>
+				<p><b>Ejemplos:</b></p>
+<pre><code>// Ejemplo básico
+var target = document.querySelector('a');
+
+_events(target).on('click.miMenu', function(e) {
+	console.log('Click detectado');
+}, { once: true });
+
+// Eliminamos el evento
+_events(target).off('.miMenu');
+</code></pre>
+				<br>
+				<h3>3. Eliminación de Eventos: .off(event?, config?)</h3>
+				<p>Elimina registros de eventos de forma granular usando namespaces o de forma masiva.</p>
+				<br>
+				<p><b>Argumentos:</b></p>
+				<p><b>event (<code>String</code>):</b></p>
+				<p>Nombre del evento que se desvinculará del manejador. Opcionalmente puede incluir uno o varios namespaces para identificar granularmente el registro.</p>
+				<br>
+				<p><b>config (<code>Object</code>):</b></p>
+				<p><b>Configuración General:</b></p>
+				<ul>
+					<li><code>pause</code>: Si es <code>true</code>, pausa todos los eventos registrados respectivos. No elimina ni desvincula definitivamente el manejador.</li>
+				</ul>
+				<br>
+				<p><b>Configuración Específica:</b></p>
+				Para remover un evento que fue registrado con opciones de comportamiento específicas (como <code>capture: true</code>), se debe pasar un objeto <code>config</code> con esas mismas propiedades al invocar <code>.off()</code>.
+				<br>
+				<br>
+				<p><b>Ejemplos:</b></p>
+				<ul>
+					<li>- Elimina solo el evento del namespace indicado:<br><pre><code>_events(target).off('click.miMenu')</code></pre></li>
+					<li>- Pausa la ejecución de todos los eventos del tipo sin desvincularlos del DOM:<br><pre><code>_events(target).off('click', { pause: true })</code></pre></li>
+					<li>- Elimina todos los eventos vinculados al nodo y libera la memoria:<br><pre><code>_events(target).off()</code></pre></li>
+				</ul>
+				<br>
+				<h3>4. Namespaces (Utilidad para Identificar Registros de Eventos)</h3>
+				<p>El framework permite definir namespaces mediante el punto (<code>.</code>). Esto permite tener múltiples manejadores para el mismo evento en el mismo elemento sin conflictos.</p>
+<pre><code>_events(window).on('resize.layout', fn1);
+_events(window).on('resize.analytics', fn2);
+
+// Eliminar solo analytics sin tocar layout:
+_events(window).off('resize.analytics');</code></pre>
+				<br>
+				<h3>5. Ejecución Manual (Trigger)</h3>
+				<p>Es posible activar la ejecución de eventos registrados sin que ocurra el evento nativo del DOM. Al utilizar <code>.on()</code> como disparador, el primer argumento (<code>event</code>) acepta únicamente el nombre del evento, únicamente el namespace (comenzando con punto) o la combinación de ambos, omitiendo los argumentos posteriores.</p>
+				<br>
+				<p><b>Ejemplos:</b></p>
+				<p>- Ejecuta solo los eventos del namespace registrado:</p>
+<pre><code>_events(target).on('.miEvento');</code></pre>
+				<p>- Ejecuta todos los eventos del tipo registrados:</p>
+<pre><code>_events(target).on('click');</code></pre>
+				<p>- Ejecuta todos los eventos registrados:</p>
+<pre><code>_events(target).on();</code></pre>
+				<br>
+				<h3>6. Eventos Especiales</h3>
+				<p>Están incluidos wrappers optimizados para eventos de ciclo de vida:</p>
+				<br>
+				<ul>
+					<li>- Al terminar de cargar toda la página: <pre><code>_events(window).load(fn)</code></pre></li>
+					<li>- Al terminar de cargar el DOM de la página: <pre><code>_events(document).ready(fn)</code></pre></li>
+				</ul>
+				<br>
+				<h3>7. Consideraciones Técnicas</h3>
+				<ul>
+					<li><b>Memoria:</b> El framework utiliza <code>WeakMap</code> donde es posible. En entornos/navegadores antiguos, se recomienda usar <code>.off()</code> antes de remover nodos del DOM para evitar fugas de memoria.</li>
+					<li><b>Inmutabilidad:</b> La configuración (<code>config</code>) se copia al registrar el evento. Cambios posteriores en el objeto original no afectarán al comportamiento del evento ya registrado.</li>
+					<li><b>Sobrescritura:</b> Usar <code>overwrite: true</code> junto con un namespace específico (ej. <code>.miMenu</code>) permite actualizar la configuración de un evento existente de forma transparente sin necesidad de eliminarlo previamente (ej. cambiar de <code>passive: true</code> a <code>false</code>).</li>
+				</ul>
+				<br>
+			</div>
+		</section>
+	</main>
+
+	<footer class="center-y padding">
+		<p>2025 &copy; Desarrollado por <a href="https://okzgn.com">OKZGN</a></p>
+	</footer>
+</body>
+</html>
+

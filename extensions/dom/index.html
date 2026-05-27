@@ -1,0 +1,135 @@
+﻿<!DOCTYPE html>
+
+<html>
+
+<head>
+	<title>DOM</title>
+
+	<link rel="icon" href="../../estructura.icon.png">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="DOM: extensión del framework Estructura.">
+	<meta name="author" content="OKZGN">
+	<meta name="theme-color" content="#ffffff">
+
+	<link href="../../estructura.styles.css" rel="stylesheet" />
+	<script src="https://unpkg.com/estructura-js"></script>
+	<script src="estructura.dom.js"></script>
+	<style>
+		
+	</style>
+	<script>
+		document.addEventListener('DOMContentLoaded', function(){
+			console.log('Estructura DOM ready.');
+
+			console.log('Iterate some DOM elements:');
+			_dom('>a').each(function(a, b){
+				console.log(b, a.textContent, a);
+			});
+
+			var domElements = _dom('>a');
+			console.log('Getting & setting some style properties:');
+	
+			domElements.set('style.textDecoration', 'underline');
+			domElements.style('text-decoration', 'none');
+			domElements.data('data-cookie', 'something');
+
+			console.log(domElements.get('style.text-decoration'));
+			console.log(domElements.data('cookie'));
+			console.log(domElements.style('color'));
+		});
+	</script>
+</head>
+
+<body>
+	<header class="center-y padding">
+		<h1 class="extension center-y">
+			<img id="logo" src="../../estructura.logo.png" alt="Estructura, JavaScript Framework">
+		</h1>
+	</header>
+
+	<nav class="margin-y">
+		<section class="silver">
+			<h2 id="index" class="center-x">Menú</h2>
+			<div class="padding">
+				<ul class="lines center-y">
+					<li class="back"><a href="../../index.html#extensions">Atrás</a></li>
+					<li><a href="#description">Descripción</a></li>
+					<li><a href="#docs">Documentación</a></li>
+				</ul>
+			</div>
+		</section>
+	</nav>
+	
+	<main>
+		<h2 class="title">DOM</h2>
+		<section class="margin-y">
+			<h2 id="description">Descripción</h2>
+			<div class="padding">Manipula el DOM. Realiza consultas, obtiene y establece propiedades (incluyendo <code>style</code> y <code>dataset</code>) de forma unificada, mediante selectores CSS (<code>DOMQuery</code>), nodos únicos (<code>Node</code>) o listas de nodos (<code>Nodes</code>).<br><br><b>Librería:</b> <a target="_blank" href="estructura.dom.js">estructura.dom.js</a></div>
+		</section>
+
+		<section class="margin-y">
+			<h2 id="docs">Documentación</h2>
+			<div class="padding">
+				<h3>1. Uso Básico</h3>
+				<p>Seleccione elementos del DOM mediante selectores <code>String</code> CSS con <code>&gt;</code> al inicio (<code>DOMQuery</code>), y objetos <code>Node</code> o <code>NodeList</code>. <b>El prefijo <code>&gt;</code> al inicio de la cadena indica a la librería que debe interpretar el texto como un selector CSS para realizar una búsqueda en el DOM (<code>DOMQuery</code>)</b>.</p>
+<pre><code>// Seleccionar elementos y aplicar cambios
+_dom('> .mi-clase').set('id', 'nuevo-id');
+_dom('> div').style('backgroundColor', 'red');
+
+// Obtener valores
+var ids = _dom('> #mi_elemento_con_id').get('id');
+
+// Con Node
+_dom(document.body).each(function(element, index){ console.log('Body:', element); });
+
+// Con Nodes
+var classes = _dom(document.getElementsByClassName('miClase')).get('className');
+</code></pre>
+				<br>
+				<h3>2. Métodos Principales</h3>
+				<h4>.each(callback)</h4>
+				<p>Itera sobre cada elemento seleccionado del DOM.</p>
+<pre><code>_dom('> li').each(function(element, index){
+	console.log('Elemento ' + index + ':', element);
+});</code></pre>
+				<br>
+				<h4>.get(property)</h4>
+				<p>Obtiene el valor de una propiedad de todos los elementos del DOM seleccionados. Soporta acceso anidado mediante puntos. Retorna un arreglo (<code>Array</code>) con los resultados.</p>
+<pre><code>var valor = _dom('> input').get('value');
+var clase = _dom('> div').get('className');
+var estilo = _dom('> main').get('style.color');
+</code></pre>
+				<br>
+				<h4>.set(property, value)</h4>
+				<p>Establece el valor de una propiedad a todos los elementos del DOM seleccionados. Soporta acceso anidado mediante puntos.</p>
+<pre><code>_dom('> input').set('value', 'Hola Mundo');
+_dom('> body').set('style.background', 'yellow');
+</code></pre>
+				<br>
+				<h4>.style(property, value)</h4>
+<p>Manipula estilos CSS. Si se omite el argumento <code>value</code>, retorna el estilo actual del elemento. Los valores se aplican como estilos <i>inline</i>. Retorna un arreglo (<code>Array</code>) con los resultados. Soporta tanto nombres de propiedades en formato camelCase (ej. <code>backgroundColor</code>) como kebab-case (ej. <code>background-color</code>).</p>
+<pre><code>_dom('> .caja').style('color', 'blue');
+var color = _dom('> .caja').style('color'); // Retorna el valor computado</code></pre>
+				<br>
+				<h4>.data(property, value)</h4>
+				<p>Manipula el <code>dataset</code>. Si se omite el argumento <code>value</code>, retorna la propiedad del elemento. Permite leer y escribir propiedades del <code>dataset</code> usando opcionalmente el prefijo <code>data-</code> y gestionando la conversión de formato de guiones a mayúsculas de manera automática (<code>camelCase</code>). Retorna un arreglo (<code>Array</code>) con los resultados.</p>
+<pre><code>_dom('> div').data('user-id', '456');
+var id = _dom('> div').data('user-id'); // Retorna el valor</code></pre>
+				<br>
+				<h3>3. Características Técnicas</h3>
+				<div class="features">
+				<p><strong>Lazy Computed Style:</strong> Optimiza el rendimiento evitando llamadas a <code>getComputedStyle</code> retornando como primera opción el valor del estilo <i>inline</i>.</p>
+				<p><strong>Sanitización Inteligente:</strong> Limpia automáticamente espacios y puntos redundantes en las rutas de propiedades.</p>
+				<p><strong>Gestión de Errores:</strong> Proporciona mensajes de error claros al intentar acceder a propiedades inexistentes o selectores/rutas inválidos.</p>
+				</div>
+			</div>
+		</section>
+	</main>
+
+	<footer class="center-y padding">
+		<p>2025 &copy; Desarrollado por <a href="https://okzgn.com">OKZGN</a></p>
+	</footer>
+</body>
+</html>
+
