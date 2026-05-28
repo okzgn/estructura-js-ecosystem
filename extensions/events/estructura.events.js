@@ -200,6 +200,7 @@
             _change_mode(event, data);
         }
 
+        var have_errors = [];
         _event_libraries_iteration.call(this, event_from, event, function(event_id_library, id){
             if(event_id_library[id].paused && !data.resume){ return; }
 
@@ -210,13 +211,23 @@
 
             var current_fns = event_id_library[id];
             for(var fn = 0; fn < current_fns.length; fn++){
-                current_fns[fn].call(this, event_data);
+                try {
+                    if(!_is_function(current_fns[fn])){ throw new Error('Not a function, internal unexpected change.'); }
+                    current_fns[fn].call(this, event_data);
+                }
+                catch(e) {
+                    have_errors.push('Error from: ' + event_from + ': ' + id + ': ' + fn + ': ' + e.message);
+                }
             }
 
             if(data.once === true){
                 _off.call(this, true, event_from, { name: event.name, mode: event.mode, id: id }, data);
             }
         });
+
+        if(have_errors.length){
+            throw new Error(have_errors.join("\n"));
+        }
     }
 
     function _change_mode(event, data){
