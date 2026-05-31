@@ -1,5 +1,5 @@
 'use strict';
 
-var _componentes = _e.instance('componentes');
-_componentes.subtype('browser-componentes');
+var _components = _e.instance('components');
+_components.subtype('browser-dom');
 

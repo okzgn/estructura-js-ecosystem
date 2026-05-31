@@ -12,6 +12,12 @@
 }(this, function(){
 	'use strict';
 
+    function _error(message){
+        var e = new Error(message);
+        e.name = '';
+        throw e;
+    }
+
     var
     array_check_str = '[object Array]',
     get_primitive_type_fn = Object.prototype.toString,
@@ -138,7 +144,7 @@
                 return _events_library[reference._e_events_id];
             }
             catch(e){
-                throw new Error('Can\'t set events to this ' + event_from + ': ' + e.message);
+                _error('Can\'t set events to this ' + event_from + ': ' + e.message);
             }
         }
 
@@ -212,7 +218,7 @@
             var current_fns = event_id_library[id];
             for(var fn = 0; fn < current_fns.length; fn++){
                 try {
-                    if(!_is_function(current_fns[fn])){ throw new Error('Not a function, internal unexpected change.'); }
+                    if(!_is_function(current_fns[fn])){ _error('Not a function, internal unexpected change.'); }
                     current_fns[fn].call(this, event_data);
                 }
                 catch(e) {
@@ -226,7 +232,7 @@
         });
 
         if(have_errors.length){
-            throw new Error(have_errors.join("\n"));
+            _error(have_errors.join("\n"));
         }
     }
 
